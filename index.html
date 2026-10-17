@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archives Photographiques — Éric Landiech</title>
+    <style>
+        :root {
+            --bg: #0c0c0e;
+            --surface: #141417;
+            --text: #f0f0f2;
+            --muted: #787882;
+            --border: #242429;
+            --accent: #e85d99; /* Clin d'œil sobre à Ride en Rose */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            padding: 5vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2rem;
+            margin-bottom: 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        /* Bloc Événement */
+        .event-block {
+            margin-bottom: 5rem;
+        }
+
+        .event-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .event-title {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 400;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .event-date {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.95rem;
+            color: var(--accent);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            padding: 0.3rem 0.75rem;
+            border-radius: 99px;
+        }
+
+        /* Liste des étapes / albums */
+        .chapter-list {
+            list-style: none;
+            border-top: 1px solid var(--border);
+        }
+
+        .chapter-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chapter-link {
+            display: grid;
+            grid-template-columns: 45px 1fr auto;
+            gap: 1rem;
+            padding: 1.25rem 0.75rem;
+            color: var(--text);
+            text-decoration: none;
+            align-items: center;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .chapter-list:hover .chapter-link {
+            opacity: 0.4;
+        }
+
+        .chapter-list .chapter-link:hover {
+            opacity: 1;
+            background-color: var(--surface);
+            padding-left: 1.25rem;
+        }
+
+        .chapter-num {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .chapter-link:hover .chapter-num {
+            color: var(--accent);
+        }
+
+        .chapter-name {
+            font-size: clamp(1.15rem, 2vw, 1.5rem);
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .chapter-action {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .chapter-link:hover .chapter-action {
+            color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Index Photographique</h1>
+        <span class="subtitle">Sélection d'événements publics</span>
+    </header>
+
+    <main id="archiveContainer"></main>
+
+    <footer>
+        <span>Photographies — Tous droits réservés</span>
+        <span>Galeries hébergées sur Google Photos</span>
+    </footer>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION DES ÉVÉNEMENTS ET ALBUMS
+        // ==========================================
+        const archives = [
+            {
+                eventTitle: "Ride en Rose",
+                eventDate: "12 Octobre 2026",
+                chapters: [
+                    { name: "Départ", url: "https://photos.app.goo.gl/Ku5TbgoyG8vVYxVp7" },
+                    { name: "Escamps", url: "https://photos.app.goo.gl/ucQS1TcEE4kiymyAA" },
+                    { name: "Paroy", url: "https://photos.app.goo.gl/gGdNeCVZBCcyoQr18" },
+                    { name: "Lindry", url: "https://photos.app.goo.gl/cQYV8jjPeSE6rsXC8" },
+                    { name: "Et si on roulait ?", url: "https://photos.app.goo.gl/mJr2owWHJLo7Z8DMA" },
+                    { name: "Arrivée", url: "https://photos.app.goo.gl/EHP211ecM996Ka9M7" }
+                ]
+            }
+            // Pour ajouter un futur événement, copie-colle le bloc ci-dessus ici
+        ];
+
+        const container = document.getElementById('archiveContainer');
+
+        archives.forEach(event => {
+            const section = document.createElement('section');
+            section.className = 'event-block';
+
+            const chaptersHtml = event.chapters.map((chap, index) => {
+                const stepNum = String(index + 1).padStart(2, '0');
+                return `
+                    <li class="chapter-item">
+                        <a href="${chap.url}" target="_blank" rel="noopener noreferrer" class="chapter-link">
+                            <span class="chapter-num">${stepNum}</span>
+                            <span class="chapter-name">${chap.name}</span>
+                            <span class="chapter-action">Voir l'album ↗</span>
+                        </a>
+                    </li>
+                `;
+            }).join('');
+
+            section.innerHTML = `
+                <div class="event-header">
+                    <h2 class="event-title">${event.eventTitle}</h2>
+                    <span class="event-date">${event.eventDate}</span>
+                </div>
+                <ul class="chapter-list">
+                    ${chaptersHtml}
+                </ul>
+            `;
+
+            container.appendChild(section);
+        });
+    </script>
+</body>
+</html>
