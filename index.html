@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archives Photographiques — Éric Landiech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0c0c0e;
-            --surface: #141417;
-            --text: #f0f0f2;
-            --muted: #787882;
-            --border: #242429;
-            --accent: #e85d99; /* Clin d'œil sobre à Ride en Rose */
+            --bg: #09090b;
+            --surface: #121216;
+            --surface-hover: #18181f;
+            --text: #f4f4f6;
+            --muted: #71717a;
+            --border: #222228;
         }
 
         * {
@@ -23,44 +26,99 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.5;
-            padding: 5vw;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
+            overflow-x: hidden;
+            position: relative;
         }
 
+        /* Lueur d'ambiance subtile en haut de page */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -20vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80vw;
+            height: 45vh;
+            background: radial-gradient(circle, rgba(232, 93, 153, 0.08) 0%, rgba(168, 85, 247, 0.04) 50%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .wrapper {
+            max-width: 1080px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 4rem 5vw;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* En-tête façon viseur / planche contact */
         header {
             border-bottom: 1px solid var(--border);
-            padding-bottom: 2rem;
-            margin-bottom: 4rem;
+            padding-bottom: 2.5rem;
+            margin-bottom: 4.5rem;
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
+            align-items: flex-end;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 1.5rem;
+        }
+
+        .brand-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .brand-eyebrow::before {
+            content: "";
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background-color: #e85d99;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #e85d99;
         }
 
         h1 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2.4rem, 5vw, 3.8rem);
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            line-height: 1;
         }
 
-        .subtitle {
+        h1 em {
+            font-style: italic;
             color: var(--muted);
-            font-size: 0.9rem;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-weight: 400;
+        }
+
+        .header-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--muted);
+            text-align: right;
+            line-height: 1.7;
         }
 
         /* Bloc Événement */
         .event-block {
-            margin-bottom: 5rem;
+            margin-bottom: 5.5rem;
+            position: relative;
         }
 
         .event-header {
@@ -69,116 +127,210 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .event-title-group {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .event-title {
-            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2rem, 4.5vw, 3.2rem);
             font-weight: 400;
-            letter-spacing: -0.03em;
             line-height: 1.1;
+            letter-spacing: -0.01em;
+        }
+
+        .event-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--event-accent, #e85d99);
+            border: 1px solid color-mix(in srgb, var(--event-accent, #e85d99) 35%, transparent);
+            background: color-mix(in srgb, var(--event-accent, #e85d99) 10%, transparent);
+            padding: 0.25rem 0.65rem;
+            border-radius: 4px;
         }
 
         .event-date {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 0.95rem;
-            color: var(--accent);
-            border: 1px solid var(--border);
-            background: var(--surface);
-            padding: 0.3rem 0.75rem;
-            border-radius: 99px;
-        }
-
-        /* Liste des étapes / albums */
-        .chapter-list {
-            list-style: none;
-            border-top: 1px solid var(--border);
-        }
-
-        .chapter-item {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .chapter-link {
-            display: grid;
-            grid-template-columns: 45px 1fr auto;
-            gap: 1rem;
-            padding: 1.25rem 0.75rem;
-            color: var(--text);
-            text-decoration: none;
-            align-items: center;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .chapter-list:hover .chapter-link {
-            opacity: 0.4;
-        }
-
-        .chapter-list .chapter-link:hover {
-            opacity: 1;
-            background-color: var(--surface);
-            padding-left: 1.25rem;
-        }
-
-        .chapter-num {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
             color: var(--muted);
         }
 
-        .chapter-link:hover .chapter-num {
-            color: var(--accent);
+        /* Grille des chapitres (Multi-albums) */
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 1rem;
+            list-style: none;
         }
 
-        .chapter-name {
-            font-size: clamp(1.15rem, 2vw, 1.5rem);
-            font-weight: 400;
-            letter-spacing: -0.01em;
+        /* Mode Bannière (Album unique comme Toutes en Moto) */
+        .chapter-grid.single-item {
+            grid-template-columns: 1fr;
         }
 
-        .chapter-action {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        .chapter-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Barre colorée latérale au survol */
+        .chapter-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--event-accent, #e85d99);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .chapter-card:hover {
+            background: var(--surface-hover);
+            border-color: color-mix(in srgb, var(--event-accent, #e85d99) 45%, var(--border));
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.6);
+        }
+
+        .chapter-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .chapter-link {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.4rem 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+            min-height: 125px;
+        }
+
+        .single-item .chapter-link {
+            flex-direction: row;
+            align-items: center;
+            min-height: auto;
+            padding: 1.6rem 2rem;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .single-item .card-top {
+            margin-bottom: 0;
+            gap: 1.5rem;
+        }
+
+        .chapter-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--muted);
+            padding: 0.2rem 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .chapter-card:hover .chapter-num {
+            color: var(--event-accent, #e85d99);
+            border-color: color-mix(in srgb, var(--event-accent, #e85d99) 40%, transparent);
+        }
+
+        .chapter-arrow {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.8rem;
             color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
             display: flex;
             align-items: center;
             gap: 0.4rem;
             transition: color 0.2s ease, transform 0.2s ease;
         }
 
-        .chapter-link:hover .chapter-action {
-            color: var(--accent);
-            transform: translateX(4px);
+        .chapter-card:hover .chapter-arrow {
+            color: var(--text);
+            transform: translate(3px, -2px);
+        }
+
+        .chapter-name {
+            font-size: 1.25rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        .single-item .chapter-name {
+            font-size: 1.35rem;
         }
 
         footer {
-            margin-top: 4rem;
+            margin-top: 3rem;
             padding-top: 2rem;
             border-top: 1px solid var(--border);
-            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
             color: var(--muted);
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 1rem;
         }
+
+        @media (max-width: 640px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-meta {
+                text-align: left;
+            }
+            .single-item .chapter-link {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                padding: 1.4rem 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Index Photographique</h1>
-        <span class="subtitle">Sélection d'événements publics</span>
-    </header>
+    <div class="wrapper">
+        <header>
+            <div>
+                <div class="brand-eyebrow">Index Photographique</div>
+                <h1>Éric Landiech <em>— Archives</em></h1>
+            </div>
+            <div class="header-meta">
+                <div>Sélection d'événements publics</div>
+                <div>Accès direct aux galeries HD</div>
+            </div>
+        </header>
 
-    <main id="archiveContainer"></main>
+        <main id="archiveContainer"></main>
 
-    <footer>
-        <span>Photographies — Tous droits réservés</span>
-        <span>Galeries hébergées sur Google Photos</span>
-    </footer>
+        <footer>
+            <span>© Éric Landiech — Tous droits réservés</span>
+            <span>Galeries hébergées sur Google Photos</span>
+        </footer>
+    </div>
 
     <script>
         // ==========================================
@@ -187,7 +339,9 @@
         const archives = [
             {
                 eventTitle: "Ride en Rose",
+                eventTag: "Octobre Rose",
                 eventDate: "12 Octobre 2026",
+                accentColor: "#e85d99", // Rose
                 chapters: [
                     { name: "Départ", url: "https://photos.app.goo.gl/Ku5TbgoyG8vVYxVp7" },
                     { name: "Escamps", url: "https://photos.app.goo.gl/ucQS1TcEE4kiymyAA" },
@@ -196,8 +350,16 @@
                     { name: "Et si on roulait ?", url: "https://photos.app.goo.gl/mJr2owWHJLo7Z8DMA" },
                     { name: "Arrivée", url: "https://photos.app.goo.gl/EHP211ecM996Ka9M7" }
                 ]
+            },
+            {
+                eventTitle: "Toutes en Moto",
+                eventTag: "Cortège & Rassemblement",
+                eventDate: "Mars 2026", // À ajuster selon la date exacte de ta prise de vue
+                accentColor: "#a855f7", // Violet / Prune
+                chapters: [
+                    { name: "Galerie complète de l'événement", url: "https://photos.app.goo.gl/cmVg7jEaZCwvnj8T6" }
+                ]
             }
-            // Pour ajouter un futur événement, copie-colle le bloc ci-dessus ici
         ];
 
         const container = document.getElementById('archiveContainer');
@@ -205,15 +367,35 @@
         archives.forEach(event => {
             const section = document.createElement('section');
             section.className = 'event-block';
+            section.style.setProperty('--event-accent', event.accentColor || '#e85d99');
+
+            const isSingle = event.chapters.length === 1;
 
             const chaptersHtml = event.chapters.map((chap, index) => {
-                const stepNum = String(index + 1).padStart(2, '0');
+                const stepNum = isSingle ? 'ALBUM' : `ÉTAPE ${String(index + 1).padStart(2, '0')}`;
+                
+                if (isSingle) {
+                    return `
+                        <li class="chapter-card">
+                            <a href="${chap.url}" target="_blank" rel="noopener noreferrer" class="chapter-link">
+                                <div class="card-top">
+                                    <span class="chapter-num">${stepNum}</span>
+                                    <span class="chapter-name">${chap.name}</span>
+                                </div>
+                                <span class="chapter-arrow">Ouvrir sur Google Photos ↗</span>
+                            </a>
+                        </li>
+                    `;
+                }
+
                 return `
-                    <li class="chapter-item">
+                    <li class="chapter-card">
                         <a href="${chap.url}" target="_blank" rel="noopener noreferrer" class="chapter-link">
-                            <span class="chapter-num">${stepNum}</span>
+                            <div class="card-top">
+                                <span class="chapter-num">${stepNum}</span>
+                                <span class="chapter-arrow">Ouvrir ↗</span>
+                            </div>
                             <span class="chapter-name">${chap.name}</span>
-                            <span class="chapter-action">Voir l'album ↗</span>
                         </a>
                     </li>
                 `;
@@ -221,10 +403,13 @@
 
             section.innerHTML = `
                 <div class="event-header">
-                    <h2 class="event-title">${event.eventTitle}</h2>
+                    <div class="event-title-group">
+                        <h2 class="event-title">${event.eventTitle}</h2>
+                        ${event.eventTag ? `<span class="event-tag">${event.eventTag}</span>` : ''}
+                    </div>
                     <span class="event-date">${event.eventDate}</span>
                 </div>
-                <ul class="chapter-list">
+                <ul class="chapter-grid ${isSingle ? 'single-item' : ''}">
                     ${chaptersHtml}
                 </ul>
             `;
